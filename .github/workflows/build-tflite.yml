@@ -16,9 +16,11 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('WORKSPACE') }}
 
     - name: Build binary
-      run: bazel build -c opt //tensorflow/lite/c:tensorflowlite_c
+      run: |
+        pip install numpy
+        bazel build -c opt //tensorflow/lite/c:tensorflowlite_c
     - name: Setup tmate session
       if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
-      timeout-minutes: 15
+      timeout-minutes: 30
 
