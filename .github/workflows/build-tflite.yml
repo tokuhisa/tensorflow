@@ -19,6 +19,12 @@ jobs:
       run: |
         pip install numpy
         bazel build -c opt //tensorflow/lite/c:tensorflowlite_c
+    - name: The job has succeeded
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: tensorflowlite_c.dll
+        path: bazel-bin/tensorflow/lite/c/tensorflowlite_c.dll
     - name: Setup tmate session
       if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
