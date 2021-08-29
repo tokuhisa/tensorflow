@@ -1,0 +1,24 @@
+name: Build TFLite
+
+on: [ workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Initialize
+      uses: actions/checkout@v2
+    - name: Cache Bazel
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/bazel
+        key: ${{ runner.os }}-${{ hashFiles('WORKSPACE') }}
+
+    - name: Build binary
+      run: bazel build -c opt //tensorflow/lite/c:tensorflowlite_c
+    - name: Setup tmate session
+      if: ${{ failure() }}
+      uses: mxschmitt/action-tmate@v3
+      timeout-minutes: 15
+
